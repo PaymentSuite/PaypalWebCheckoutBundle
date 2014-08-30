@@ -91,9 +91,9 @@ class PaypalFormTypeWrapper
      * @param RouterInterface        $router                  Routing service
      * @param string                 $bussines                merchant code
      * @param string                 $paypalUrl               gateway url
-     * @param string                 $returnUrl               merchant url ok
-     * @param string                 $cancelReturnUrl         merchant url ko
-     * @param string                 $notifyUrl               merchant payment proccess url
+     * @param string                 $returnRouteName         merchant route ok
+     * @param string                 $cancelReturnRouteName   merchant route ko
+     * @param string                 $notifyRouteName         merchant payment proccess route
      */
     public function __construct(
         FormFactory $formFactory,
@@ -101,18 +101,18 @@ class PaypalFormTypeWrapper
         RouterInterface $router,
         $business,
         $paypalUrl,
-        $returnUrl,
-        $cancelReturnUrl,
-        $notifyUrl
+        $returnRouteName,
+        $cancelReturnRouteName,
+        $notifyRouteName
     ) {
-        $this->formFactory     = $formFactory;
-        $this->paymentBridge   = $paymentBridge;
-        $this->router          = $router;
-        $this->business        = $business;
-        $this->paypalUrl       = $paypalUrl;
-        $this->returnUrl       = $returnUrl;
-        $this->cancelReturnUrl = $cancelReturnUrl;
-        $this->notifyUrl       = $notifyUrl;
+        $this->formFactory           = $formFactory;
+        $this->paymentBridge         = $paymentBridge;
+        $this->router                = $router;
+        $this->business              = $business;
+        $this->paypalUrl             = $paypalUrl;
+        $this->returnRouteName       = $returnRouteName;
+        $this->cancelReturnRouteName = $cancelReturnRouteName;
+        $this->notifyRouteName       = $notifyRouteName;
     }
 
     /**
