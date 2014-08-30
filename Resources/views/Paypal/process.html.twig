@@ -6,13 +6,16 @@
 </head>
 <body>
     {{ form_start(paypal_form) }}
+        <input type="hidden" name="cmd" value="_xclick">
         <input type="hidden" name="lc" value="{{ app.request.locale }}">
+
+        {{ form_rest(paypal_form) }}
     {{ form_end(paypal_form) }}
 
     <script language="JavaScript" type="text/javascript">
 
         var form = document.forms[0];
-        //form.submit();
+        form.submit();
 
     </script>
 </body>
