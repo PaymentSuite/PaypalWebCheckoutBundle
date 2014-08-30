@@ -15,6 +15,7 @@ namespace PaymentSuite\PaypalWebCheckoutBundle\Services;
 use PaymentSuite\PaymentCoreBundle\Services\Interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaymentCoreBundle\Services\PaymentEventDispatcher;
 use PaymentSuite\PaypalWebCheckoutBundle\PaypalWebCheckoutMethod;
+use PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper\PaypalWebCheckoutTransactionWrapper;
 
 /**
  * Paypal Web Checkout manager
