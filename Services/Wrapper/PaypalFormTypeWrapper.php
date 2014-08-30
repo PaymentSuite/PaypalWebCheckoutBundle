@@ -13,6 +13,7 @@
 namespace PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper;
 
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Routing\RouterInterface;
 
 use PaymentSuite\PaymentCoreBundle\Services\interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\CurrencyNotSupportedException;
@@ -32,6 +33,13 @@ class PaypalFormTypeWrapper
      * Payment bridge
      */
     private $paymentBridge;
+
+    /**
+     * @var Router
+     *
+     * Router
+     */
+    private $router;
 
     /**
      * @var string $business
@@ -80,6 +88,7 @@ class PaypalFormTypeWrapper
      *
      * @param FormFactory            $formFactory             Form factory
      * @param PaymentBridgeInterface $paymentBridge           Payment bridge
+     * @param RouterInterface        $router                  Routing service
      * @param string                 $bussines                merchant code
      * @param string                 $paypalUrl               gateway url
      * @param string                 $returnUrl               merchant url ok
@@ -89,6 +98,7 @@ class PaypalFormTypeWrapper
     public function __construct(
         FormFactory $formFactory,
         PaymentBridgeInterface $paymentBridge,
+        RouterInterface $router,
         $business,
         $paypalUrl,
         $returnUrl,
@@ -97,6 +107,7 @@ class PaypalFormTypeWrapper
     ) {
         $this->formFactory     = $formFactory;
         $this->paymentBridge   = $paymentBridge;
+        $this->router          = $router;
         $this->business        = $business;
         $this->paypalUrl       = $paypalUrl;
         $this->returnUrl       = $returnUrl;
