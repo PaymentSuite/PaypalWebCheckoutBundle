@@ -56,8 +56,11 @@ class PaypalWebCheckoutManager
      * @param PaymentBridgeInterface $paymentBridge          Payment Bridge
      * @param PaypalWebCheckoutTransactionWrapper Paypal Wrapper
      */
-    public function __construct(PaymentEventDispatcher $paymentEventDispatcher, PaymentBridgeInterface $paymentBridge, PaypalWebCheckoutTransactionWrapper $paypalWrapper)
-    {
+    public function __construct(
+        PaymentEventDispatcher $paymentEventDispatcher,
+        PaymentBridgeInterface $paymentBridge,
+        PaypalWebCheckoutTransactionWrapper $paypalWrapper
+    ) {
         $this->paymentEventDispatcher = $paymentEventDispatcher;
         $this->paymentBridge = $paymentBridge;
         $this->paypalWrapper = $paypalWrapper;
@@ -68,22 +71,22 @@ class PaypalWebCheckoutManager
      */
     public function preparePayment(PaypalExpressCheckoutMethod $paypalMethod)
     {
-        
+
     }
 
     /**
-     * 
+     *
      */
     public function processPayment(PaypalExpressCheckoutMethod $paymentMethod)
     {
-        
+
     }
 
     /**
-     * 
+     *
      */
     public function getPaymentStatus(PaypalExpressCheckoutTransactionWrapper $paypalWrapper)
     {
-        
+
     }
 }
