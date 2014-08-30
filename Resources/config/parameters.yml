@@ -1,6 +1,6 @@
 parameters:
 
-    paypal_web_checkout.api_endpoint: https://www.sandbox.paypal.com/cgi-bin/webscr
+    paypal_web_checkout.api_endpoint: https://www.paypal.com/cgi-bin/webscr
     paypal_web_checkout.controller.route.name: "paypal_web_checkout_execute"
     paypal_web_checkout.routes.loader.class: "PaymentSuite\\PaypalWebCheckoutBundle\\Router\\PaypalWebCheckoutRoutesLoader"
     paypal_web_checkout.wrapper.class: "PaymentSuite\\PaypalWebCheckoutBundle\\Services\\Wrapper\\PaypalFormTypeWrapper"
