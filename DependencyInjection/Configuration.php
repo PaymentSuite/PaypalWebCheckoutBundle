@@ -9,7 +9,7 @@
  *
  * Arkaitz Garro 2014
  */
- 
+
 namespace PaymentSuite\PaypalWebCheckoutBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -47,6 +47,9 @@ class Configuration implements ConfigurationInterface
                             ->isRequired()
                             ->cannotBeEmpty()
                         ->end()
+                        ->booleanNode('path')
+                            ->defaultValue('/payment/paypal_web_checkout/ok')
+                        ->end()
                         ->booleanNode('order_append')
                             ->defaultTrue()
                         ->end()
@@ -61,6 +64,9 @@ class Configuration implements ConfigurationInterface
                             ->isRequired()
                             ->cannotBeEmpty()
                         ->end()
+                        ->booleanNode('path')
+                            ->defaultValue('/payment/paypal_web_checkout/ko')
+                        ->end()
                         ->booleanNode('order_append')
                             ->defaultTrue()
                         ->end()
@@ -74,6 +80,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('route')
                             ->isRequired()
                             ->cannotBeEmpty()
+                        ->end()
+                        ->booleanNode('path')
+                            ->defaultValue('/payment/paypal_web_checkout/process')
                         ->end()
                     ->end()
                 ->end()
