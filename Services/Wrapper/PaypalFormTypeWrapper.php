@@ -134,9 +134,9 @@ class PaypalFormTypeWrapper
         /**
          * Create routes
          */
-        $returnUrl       = $this->router->generate($this->returnRouteName);
-        $cancelReturnUrl = $this->router->generate($this->cancelReturnRouteName);
-        $notifyUrl       = $this->router->generate($this->notifyRouteName);
+        $returnUrl       = $this->router->generate($this->returnRouteName, [], true);
+        $cancelReturnUrl = $this->router->generate($this->cancelReturnRouteName, [], true);
+        $notifyUrl       = $this->router->generate($this->notifyRouteName, [], true);
 
         $formBuilder
             ->setAction($this->paypalUrl)
