@@ -40,4 +40,40 @@ class PaypalWebCheckoutController extends Controller
             'paypal_form' => $formView,
         ));
     }
+    
+    /**
+     * Payment success action
+     *
+     * @param Request $request Request element
+     *
+     * @return Response
+     *
+     * @Method("GET")
+     */
+    public function okAction(Request $request)
+    {
+        $orderId = $request->query->get('order_id', false);
+
+        return $this->render('PaypalWebCheckoutBundle:Frontend:success.html.twig',array(
+            'orderId' => $orderId,
+        ));
+    }
+
+    /**
+     * Payment fail action
+     *
+     * @param Request $request Request element
+     *
+     * @return Response
+     *
+     * @Method("GET")
+     */
+    public function koAction(Request $request)
+    {
+        $orderId = $request->query->get('order_id', false);
+
+        return $this->render('PaypalWebCheckoutBundle:Frontend:fail.html.twig',array(
+            'orderId' => $orderId,
+        ));
+    }
 }
