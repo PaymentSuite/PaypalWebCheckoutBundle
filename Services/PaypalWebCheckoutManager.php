@@ -70,23 +70,15 @@ class PaypalWebCheckoutManager
     /**
      * See also PaypalWebCheckout Api Integration : https://developer.paypal.com/docs/integration/web/web-checkout/
      */
-    public function preparePayment(PaypalWebCheckoutMethod $paypalMethod)
+    public function processPayment()
     {
-
+        $paypalMethod = new PaypalWebCheckoutMethod();
     }
 
     /**
      *
      */
-    public function processPayment(PaypalWebCheckoutMethod $paymentMethod)
-    {
-
-    }
-
-    /**
-     *
-     */
-    public function getPaymentStatus(PaypalWebCheckoutTransactionWrapper $paypalWrapper)
+    public function getPaymentStatus()
     {
 
     }
