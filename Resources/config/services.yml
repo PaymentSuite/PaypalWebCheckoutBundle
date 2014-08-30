@@ -6,3 +6,10 @@ services:
             paypal_web_checkout.controller.route: %paypal_web_checkout.controller.route%
         tags:
             - { name: routing.loader }
+
+    paypal_web_checkout.manager:
+        class: %paypal_web_checkout.manager.class%
+        arguments:
+            payment.event.dispatcher: @payment.event.dispatcher
+            payment.transaction.wrapper: @paypal_web_checkout.wrapper
+            payment.bridge: @payment.bridge
