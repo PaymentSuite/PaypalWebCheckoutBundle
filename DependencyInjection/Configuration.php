@@ -69,6 +69,14 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('payment_process')
+                    ->children()
+                        ->scalarNode('route')
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
