@@ -17,6 +17,7 @@ use PaymentSuite\PaymentCoreBundle\Exception\PaymentOrderNotFoundException;
 use PaymentSuite\PaymentCoreBundle\Services\Interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaymentCoreBundle\Services\PaymentEventDispatcher;
 use PaymentSuite\PaypalWebCheckoutBundle\PaypalWebCheckoutMethod;
+use PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException;
 use PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper\PaypalFormTypeWrapper;
 
 /**
@@ -113,10 +114,90 @@ class PaypalWebCheckoutManager
     }
 
     /**
-     *
+     *  Process Paypal response
      */
-    public function getPaymentStatus()
+    public function processResult(array $parameters)
     {
+        // Check we receive all needed parameters
+        $this->checkResultParameters($parameters);
 
+        // Check if the transaction is successful
+        if (!$this->transactionSuccessful($parameters)) {
+            /**
+             * Payment paid failed
+             *
+             * Paid process has ended failed
+             */
+            $this
+                ->paymentEventDispatcher
+                ->notifyPaymentOrderFail(
+                    $this->paymentBridge,
+                    $paypalMethod
+                );
+
+            throw new PaymentException();
+        }
+
+        $paypalMethod = new PaypalWebCheckoutMethod();
+
+        $orderId = $parameters['order_id'];
+
+        /**
+         * Adding transaction information to PaymentMethod
+         *
+         * This information is only available in PaymentOrderSuccess event
+         */
+        $paypalMethod
+            ->setOrderNumber($orderId);
+
+        /**
+         * Payment paid successfully
+         *
+         * Paid process has ended successfully
+         */
+        $this
+            ->paymentEventDispatcher
+            ->notifyPaymentOrderSuccess(
+                $this->paymentBridge,
+                $paypalMethod
+            );
+
+        return $this;
+    }
+
+    /**
+     * Checks that all the required parameters are received
+     *
+     * @param array $parameters Parameters
+     *
+     * @throws \PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException
+     */
+    protected function checkResultParameters(array $parameters)
+    {
+        $list = array(
+            'item_number',
+            'payment_status'
+        );
+
+        foreach ($list as $item) {
+            if (!isset($parameters[$item])) {
+               throw new ParameterNotReceivedException($item);
+            }
+        }
+    }
+
+    /**
+     * Check if transaction is complete
+     * 
+     * @param array $response Paypal response
+     * 
+     * @return boolean
+     */
+    public function transactionSuccessful($response)
+    {
+        /**
+         * When a transaction is successful, payment_status has a 'Completed' value
+         */
+        return strcmp($response['payment_status'], 'Completed') === 0;
     }
 }
