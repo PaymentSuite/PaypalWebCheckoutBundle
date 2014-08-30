@@ -56,13 +56,6 @@ class PaypalFormTypeWrapper
     private $paypalUrl;
 
     /**
-     * @var booelan $debug
-     *
-     * Debug integration
-     */
-    private $debug;
-
-    /**
      * @var string $returnUrl
      *
      * Route for success payment
@@ -84,6 +77,20 @@ class PaypalFormTypeWrapper
     private $notifyUrl;
 
     /**
+     * @var boolean $debug
+     *
+     * Debug enviroment
+     */
+    private $debug;
+
+    /**
+     * @var string $env
+     *
+     * Environment
+     */
+    private $env;
+
+    /**
      * Formtype construct method
      *
      * @param FormFactory            $formFactory             Form factory
@@ -94,6 +101,7 @@ class PaypalFormTypeWrapper
      * @param string                 $returnRouteName         merchant route ok
      * @param string                 $cancelReturnRouteName   merchant route ko
      * @param string                 $notifyRouteName         merchant payment proccess route
+     * @param boolean                $debug                   debug mode
      */
     public function __construct(
         FormFactory $formFactory,
@@ -103,7 +111,8 @@ class PaypalFormTypeWrapper
         $paypalUrl,
         $returnRouteName,
         $cancelReturnRouteName,
-        $notifyRouteName
+        $notifyRouteName,
+        $debug
     ) {
         $this->formFactory           = $formFactory;
         $this->paymentBridge         = $paymentBridge;
@@ -113,6 +122,8 @@ class PaypalFormTypeWrapper
         $this->returnRouteName       = $returnRouteName;
         $this->cancelReturnRouteName = $cancelReturnRouteName;
         $this->notifyRouteName       = $notifyRouteName;
+        $this->debug                 = $debug;
+        $this->env                   = 'www.sandbox';
     }
 
     /**
@@ -138,6 +149,11 @@ class PaypalFormTypeWrapper
         $cancelReturnUrl = $this->router->generate($this->cancelReturnRouteName, [], true);
         $notifyUrl       = $this->router->generate($this->notifyRouteName, [], true);
 
+        if (!$this->debug) {
+            $this->paypalUrl = str_replace('.sandbox', 'replace', $this->paypalUrl);
+            $this->env       = str_replace('.sandbox', 'replace', $this->env);
+        }
+
         $formBuilder
             ->setAction($this->paypalUrl)
             ->setMethod('POST')
@@ -162,6 +178,9 @@ class PaypalFormTypeWrapper
             ))
             ->add('currency_code', 'hidden', array(
                 'data' => $currency,
+            ))
+            ->add('env', 'hidden', array(
+                'data' => $this->env,
             ))
         ;
 
