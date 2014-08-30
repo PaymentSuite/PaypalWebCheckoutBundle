@@ -31,3 +31,4 @@ services:
             return_url: %paypal_web_checkout.success.route.name%
             cancel_return_url: %paypal_web_checkout.fail.route.name%
             notify_url: %paypal_web_checkout.process.route.name%
+            debug: %paypal_web_checkout.debug%
