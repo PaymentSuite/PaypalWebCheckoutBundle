@@ -12,7 +12,7 @@ services:
         arguments:
             payment.event.dispatcher: @payment.event.dispatcher
             payment.bridge: @payment.bridge
-            payment.transaction.wrapper: @paypal_web_checkout.wrapper
+            payment.form.wrapper: @paypal_web_checkout.wrapper
 
     paypal_web_checkout.wrapper:
         class: %paypal_web_checkout.wrapper.class%
