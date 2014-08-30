@@ -17,8 +17,7 @@ use PaymentSuite\PaymentCoreBundle\Exception\PaymentOrderNotFoundException;
 use PaymentSuite\PaymentCoreBundle\Services\Interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaymentCoreBundle\Services\PaymentEventDispatcher;
 use PaymentSuite\PaypalWebCheckoutBundle\PaypalWebCheckoutMethod;
-use PaymentSuite\PaypalWebCheckoutBundle\Form\Type\PaypalFormTypeWrapper;
-use PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper\PaypalWebCheckoutTransactionWrapper;
+use PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper\PaypalFormTypeWrapper;
 
 /**
  * Paypal Web Checkout manager
@@ -58,12 +57,12 @@ class PaypalWebCheckoutManager
      *
      * @param PaymentEventDispatcher $paymentEventDispatcher Event dispatcher
      * @param PaymentBridgeInterface $paymentBridge          Payment Bridge
-     * @param PaypalWebCheckoutTransactionWrapper Paypal Wrapper
+     * @param PaypalFormTypeWrapper  $paypalWrapper          Paypal Wrapper
      */
     public function __construct(
         PaymentEventDispatcher $paymentEventDispatcher,
         PaymentBridgeInterface $paymentBridge,
-        PaypalWebCheckoutTransactionWrapper $paypalWrapper
+        PaypalFormTypeWrapper $paypalWrapper
     ) {
         $this->paymentEventDispatcher = $paymentEventDispatcher;
         $this->paymentBridge = $paymentBridge;
