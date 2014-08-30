@@ -49,10 +49,24 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
      * @param string $controllerRouteName Controller route name
      * @param string $controllerRoute     Controller route
      */
-    public function __construct($controllerRouteName, $controllerRoute)
-    {
+    public function __construct(
+        $controllerRouteName,
+        $controllerRoute,
+        $controllerSuccessRouteName,
+        $controllerSuccessRoute,
+        $controllerFailRouteName,
+        $controllerFailRoute,
+        $controllerNotifyRouteName,
+        $controllerNotifyRoute
+    ) {
         $this->controllerRouteName = $controllerRouteName;
         $this->controllerRoute = $controllerRoute;
+        $this->controllerSuccessRouteName = $controllerSuccessRouteName;
+        $this->controllerSuccessRoute = $controllerSuccessRoute;
+        $this->controllerFailRouteName = $controllerFailRouteName;
+        $this->controllerFailRoute = $controllerFailRoute;
+        $this->controllerNotifyRouteName = $controllerNotifyRouteName;
+        $this->controllerNotifyRoute = $controllerNotifyRoute;
     }
 
     /**
@@ -73,8 +87,21 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
         }
 
         $routes = new RouteCollection();
+
         $routes->add($this->controllerRouteName, new Route($this->controllerRoute, array(
             '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:execute',
+        )));
+
+        $routes->add($this->controllerSuccessRouteName, new Route($this->controllerSuccessRoute, array(
+            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:ok',
+        )));
+
+        $routes->add($this->controllerFailRouteName, new Route($this->controllerFailRoute, array(
+            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:ko',
+        )));
+
+        $routes->add($this->controllerNotifyRouteName, new Route($this->controllerNotifyRoute, array(
+            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:process',
         )));
 
         $this->loaded = true;
@@ -94,7 +121,7 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
     {
         return 'paypal_web_checkout' === $type;
     }
-    
+
     /**
      * Gets the loader resolver.
      *
