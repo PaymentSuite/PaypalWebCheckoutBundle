@@ -150,8 +150,8 @@ class PaypalFormTypeWrapper
         $notifyUrl       = $this->router->generate($this->notifyRouteName, [], true);
 
         if (!$this->debug) {
-            $this->paypalUrl = str_replace('.sandbox', 'replace', $this->paypalUrl);
-            $this->env       = str_replace('.sandbox', 'replace', $this->env);
+            $this->paypalUrl = str_replace('.sandbox', '', $this->paypalUrl);
+            $this->env       = str_replace('.sandbox', '', $this->env);
         }
 
         $formBuilder
