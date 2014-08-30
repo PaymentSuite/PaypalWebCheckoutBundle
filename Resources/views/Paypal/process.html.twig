@@ -7,7 +7,7 @@
 <body>
     {{ form_start(paypal_form) }}
         <input type="hidden" name="lc" value="{{ app.request.locale }}">
-    {{ form_send(paypal_form) }}
+    {{ form_end(paypal_form) }}
 
     <script language="JavaScript" type="text/javascript">
 
