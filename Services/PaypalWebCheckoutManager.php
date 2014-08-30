@@ -57,16 +57,16 @@ class PaypalWebCheckoutManager
      *
      * @param PaymentEventDispatcher $paymentEventDispatcher Event dispatcher
      * @param PaymentBridgeInterface $paymentBridge          Payment Bridge
-     * @param PaypalFormTypeWrapper  $paypalWrapper          Paypal Wrapper
+     * @param PaypalFormTypeWrapper  $paypalFormTypeWrapper  Paypal Wrapper
      */
     public function __construct(
         PaymentEventDispatcher $paymentEventDispatcher,
         PaymentBridgeInterface $paymentBridge,
-        PaypalFormTypeWrapper $paypalWrapper
+        PaypalFormTypeWrapper $paypalFormTypeWrapper
     ) {
         $this->paymentEventDispatcher = $paymentEventDispatcher;
         $this->paymentBridge = $paymentBridge;
-        $this->paypalWrapper = $paypalWrapper;
+        $this->paypalFormTypeWrapper = $paypalFormTypeWrapper;
     }
 
     /**
@@ -75,7 +75,7 @@ class PaypalWebCheckoutManager
     public function processPayment()
     {
         $paypalMethod = new PaypalWebCheckoutMethod();
-        
+
         /**
          * At this point, order must be created given a cart, and placed in PaymentBridge
          *
