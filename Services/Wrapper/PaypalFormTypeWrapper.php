@@ -194,11 +194,31 @@ class PaypalFormTypeWrapper
     public function checkCurrency($currency)
     {
         $allowedCurrencies = [
-            'AUD', 'BRL', 'CAD', 'CZK', 'DKK',
-            'EUR', 'HKD', 'HUF', 'ILS', 'JPY',
-            'MYR', 'MXN', 'NOK', 'NZD', 'PHP',
-            'PLN', 'GBP', 'RUB', 'SGD', 'SEK',
-            'CHF', 'TWD', 'THB', 'TRY', 'USD'
+            'AUD',
+            'BRL',
+            'CAD',
+            'CZK',
+            'DKK',
+            'EUR',
+            'HKD',
+            'HUF',
+            'ILS',
+            'JPY',
+            'MYR',
+            'MXN',
+            'NOK',
+            'NZD',
+            'PHP',
+            'PLN',
+            'GBP',
+            'RUB',
+            'SGD',
+            'SEK',
+            'CHF',
+            'TWD',
+            'THB',
+            'TRY',
+            'USD'
         ];
 
         if (!in_array($currency, $allowedCurrencies)) {
