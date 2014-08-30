@@ -5,12 +5,14 @@
     <title>Document</title>
 </head>
 <body>
-    {{ form(paypal_form) }}
+    {{ form_start(paypal_form) }}
+        <input type="hidden" name="lc" value="{{ app.request.locale }}">
+    {{ form_send(paypal_form) }}
 
     <script language="JavaScript" type="text/javascript">
 
         var form = document.forms[0];
-        // form.submit();
+        //form.submit();
 
     </script>
 </body>
