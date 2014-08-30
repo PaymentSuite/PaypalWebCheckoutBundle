@@ -43,6 +43,8 @@ class PaypalWebCheckoutExtension extends Extension
         $container->setParameter('paypal_web_checkout.fail.route', $config['payment_fail']['route']);
         $container->setParameter('paypal_web_checkout.fail.order.append', $config['payment_fail']['order_append']);
         $container->setParameter('paypal_web_checkout.fail.order.field', $config['payment_fail']['order_append_field']);
+        
+        $container->setParameter('paypal_web_checkout.process.route', $config['payment_process']['route']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('parameters.yml');
