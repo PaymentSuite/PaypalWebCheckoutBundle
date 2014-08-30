@@ -4,6 +4,12 @@ services:
         arguments:
             paypal_web_checkout.controller.route.name: %paypal_web_checkout.controller.route.name%
             paypal_web_checkout.controller.route: %paypal_web_checkout.controller.route%
+            paypal_web_checkout.success.route.name: %paypal_web_checkout.success.route.name%
+            paypal_web_checkout.success.route: %paypal_web_checkout.success.route%
+            paypal_web_checkout.fail.route.name: %paypal_web_checkout.fail.route.name%
+            paypal_web_checkout.fail.route: %paypal_web_checkout.fail.route%
+            paypal_web_checkout.process.route.name: %paypal_web_checkout.process.route.name%
+            paypal_web_checkout.process.route: %paypal_web_checkout.process.route%
         tags:
             - { name: routing.loader }
 
@@ -22,6 +28,6 @@ services:
             router: @router
             business: %paypal_web_checkout.business%
             paypal_url: %paypal_web_checkout.api_endpoint%
-            return_url: ''
-            cancel_return_url: ''
-            notify_url: ''
+            return_url: %paypal_web_checkout.success.route.name%
+            cancel_return_url: %paypal_web_checkout.fail.route.name%
+            notify_url: %paypal_web_checkout.process.route.name%
