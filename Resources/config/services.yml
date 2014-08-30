@@ -17,6 +17,10 @@ services:
     paypal_web_checkout.wrapper:
         class: %paypal_web_checkout.wrapper.class%
         arguments:
+            form.factory: @form.factory
+            payment.bridge: @payment.bridge
             business: %paypal_web_checkout.business%
-            endpoint: %paypal_web_checkout.api_endpoint%
-            debug: %paypal_web_checkout.debug%
+            paypal_url: %paypal_web_checkout.api_endpoint%
+            return_url: ''
+            cancel_return_url: ''
+            notify_url: ''
