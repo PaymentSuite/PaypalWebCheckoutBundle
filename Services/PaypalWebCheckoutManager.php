@@ -116,7 +116,7 @@ class PaypalWebCheckoutManager
     /**
      *  Process Paypal response
      */
-    public function processResult(array $parameters)
+    public function processResult($orderId, array $parameters)
     {
         // Check we receive all needed parameters
         $this->checkResultParameters($parameters);
