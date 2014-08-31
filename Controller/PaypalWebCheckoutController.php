@@ -90,7 +90,7 @@ class PaypalWebCheckoutController extends Controller
         try {
             $this
                 ->get('paypal_web_checkout.manager')
-                ->processResult($request->request->all());
+                ->processResult($orderId, $request->request->all());
         } catch (ParameterNotReceivedException $pex) {
             $logger->err(
                 sprintf(
