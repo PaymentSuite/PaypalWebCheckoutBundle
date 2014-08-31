@@ -140,8 +140,6 @@ class PaypalWebCheckoutManager
 
         $paypalMethod = new PaypalWebCheckoutMethod();
 
-        $orderId = $parameters['order_id'];
-
         /**
          * Adding transaction information to PaymentMethod
          *
