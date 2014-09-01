@@ -100,9 +100,22 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
             '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:ko',
         )));
 
-        $routes->add($this->controllerNotifyRouteName, new Route($this->controllerNotifyRoute, array(
-            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:process',
-        )));
+        $routes->add(
+            $this->controllerNotifyRouteName,
+            new Route(
+                $this->controllerNotifyRoute,
+                array(
+                    '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:process',
+                ),
+                array(),
+                array(),
+                '',
+                array(),
+                array(
+                    'POST'
+                )
+            )
+        );
 
         $this->loaded = true;
 
