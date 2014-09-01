@@ -31,14 +31,12 @@ class PaypalWebCheckoutController extends Controller
      * @param Request $request Request element
      *
      * @return Response
-     *
-     * @Method("GET")
      */
     public function executeAction(Request $request)
     {
         $formView = $this->get('paypal_web_checkout.manager')->processPayment();
 
-        return $this->render('PaypalWebCheckoutBundle:Paypal:process.html.twig',array(
+        return $this->render('PaypalWebCheckoutBundle:Paypal:process.html.twig', array(
             'paypal_form' => $formView,
         ));
     }
@@ -49,14 +47,12 @@ class PaypalWebCheckoutController extends Controller
      * @param Request $request Request element
      *
      * @return Response
-     *
-     * @Method("GET")
      */
     public function okAction(Request $request)
     {
         $orderId = $request->query->get('order_id', false);
 
-        return $this->render('PaypalWebCheckoutBundle:Frontend:success.html.twig',array(
+        return $this->render('PaypalWebCheckoutBundle:Frontend:success.html.twig', array(
             'orderId' => $orderId,
         ));
     }
@@ -67,20 +63,22 @@ class PaypalWebCheckoutController extends Controller
      * @param Request $request Request element
      *
      * @return Response
-     *
-     * @Method("GET")
      */
     public function koAction(Request $request)
     {
         $orderId = $request->query->get('order_id', false);
 
-        return $this->render('PaypalWebCheckoutBundle:Frontend:fail.html.twig',array(
+        return $this->render('PaypalWebCheckoutBundle:Frontend:fail.html.twig', array(
             'orderId' => $orderId,
         ));
     }
 
     /**
      * Process Paypal response
+     *
+     * @param Request $request Request element
+     *
+     * @return Response
      */
     public function processAction(Request $request)
     {
@@ -90,7 +88,7 @@ class PaypalWebCheckoutController extends Controller
         try {
             $this
                 ->get('paypal_web_checkout.manager')
-                ->processResult($orderId, $request->request->all());
+                ->processResult($orderId, $request->query->all());
         } catch (ParameterNotReceivedException $pex) {
             $logger->err(
                 sprintf(
