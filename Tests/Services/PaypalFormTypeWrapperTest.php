@@ -84,9 +84,10 @@ class PaypalFormTypeWrapperTest extends TypeTestCase
         parent::setUp();
 
         $this->paymentBridge = $this
-            ->getMockBuilder('Mmoreram\PaymentBridgeBundle\Services\PaymentBridge')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockBuilder('PaymentSuite\PaymentCoreBundle\Services\Interfaces\PaymentBridgeInterface')
+            ->setMethods(array('setAmount', 'getAmount', 'findOrder', 'getOrder', 'setOrder', 'getOrderId', 'getCurrency', 'isOrderPaid', 'getExtraData', 'getOrderDescription'))
+            ->getMock()
+        ;
 
         $this->paymentEventDispatcher = $this
             ->getMockBuilder('PaymentSuite\PaymentCoreBundle\Services\PaymentEventDispatcher')
