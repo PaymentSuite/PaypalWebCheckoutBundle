@@ -81,7 +81,7 @@ class Configuration implements ConfigurationInterface
                             ->isRequired()
                             ->cannotBeEmpty()
                         ->end()
-                        ->booleanNode('path')
+                        ->scalarNode('path')
                             ->defaultValue('/payment/paypal_web_checkout/process')
                         ->end()
                     ->end()
