@@ -26,7 +26,6 @@ paypal_web_checkout:
     #    PaymentOrderWrapper->getOrderId() value
     payment_success:
         route: payment_success
-        path: /payment/paypal_web_checkout/ok
         order_append: true
         order_append_field: order_id
 
@@ -36,7 +35,6 @@ paypal_web_checkout:
 
     payment_fail:
         route: payment_failed
-        path: /payment/paypal_web_checkout/ko
         order_append: false
         order_append_field: order_id
         
