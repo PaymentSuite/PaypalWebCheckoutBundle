@@ -46,25 +46,19 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
     /**
      * Construct method
      *
-     * @param string $controllerRouteName Controller route name
-     * @param string $controllerRoute     Controller route
+     * @param string $controllerRouteName       Controller route name
+     * @param string $controllerRoute           Controller route
+     * @param string $controllerNotifyRouteName Controller route name
+     * @param string $controllerNotifyRoute     Controller route
      */
     public function __construct(
         $controllerRouteName,
         $controllerRoute,
-        $controllerSuccessRouteName,
-        $controllerSuccessRoute,
-        $controllerFailRouteName,
-        $controllerFailRoute,
         $controllerNotifyRouteName,
         $controllerNotifyRoute
     ) {
         $this->controllerRouteName = $controllerRouteName;
         $this->controllerRoute = $controllerRoute;
-        $this->controllerSuccessRouteName = $controllerSuccessRouteName;
-        $this->controllerSuccessRoute = $controllerSuccessRoute;
-        $this->controllerFailRouteName = $controllerFailRouteName;
-        $this->controllerFailRoute = $controllerFailRoute;
         $this->controllerNotifyRouteName = $controllerNotifyRouteName;
         $this->controllerNotifyRoute = $controllerNotifyRoute;
     }
