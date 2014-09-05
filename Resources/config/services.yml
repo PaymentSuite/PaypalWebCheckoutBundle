@@ -4,10 +4,6 @@ services:
         arguments:
             paypal_web_checkout.controller.route.name: %paypal_web_checkout.controller.route.name%
             paypal_web_checkout.controller.route: %paypal_web_checkout.controller.route%
-            paypal_web_checkout.success.route.name: %paypal_web_checkout.success.route.name%
-            paypal_web_checkout.success.route: %paypal_web_checkout.success.route%
-            paypal_web_checkout.fail.route.name: %paypal_web_checkout.fail.route.name%
-            paypal_web_checkout.fail.route: %paypal_web_checkout.fail.route%
             paypal_web_checkout.process.route.name: %paypal_web_checkout.process.route.name%
             paypal_web_checkout.process.route: %paypal_web_checkout.process.route%
         tags:
