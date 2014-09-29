@@ -14,7 +14,6 @@
 namespace PaymentSuite\PaypalWebCheckoutBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Class PaypalWebCheckoutControllerTest

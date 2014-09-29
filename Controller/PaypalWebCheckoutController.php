@@ -13,13 +13,12 @@
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use PaymentSuite\PaymentCoreBundle\Exception\PaymentException;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException;
-use PaymentSuite\PaypalWebCheckoutBundle\Exception\PaymentException;
 
 /**
  * Class PaypalWebCheckoutController
@@ -37,7 +36,14 @@ class PaypalWebCheckoutController extends Controller
      */
     public function executeAction(Request $request)
     {
-        $formView = $this->get('paypal_web_checkout.manager')->processPayment();
+        /*
+         * This is used to BUILD THE FORM before redirecting
+         *
+         * Should be renamed renderRedirectFormAction
+         *
+         * The manager method should also be renamed to createRedirectFormView
+         */
+        $formView = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
 
         return $this->render('PaypalWebCheckoutBundle:Paypal:process.html.twig', array(
             'paypal_form' => $formView,
@@ -77,7 +83,20 @@ class PaypalWebCheckoutController extends Controller
     }
 
     /**
-     * Process Paypal response
+     * Process Paypal IPN notification
+     *
+     * This controller handles the IPN notification.
+     * The notification is sent using POST method. However,
+     * we expect our internal order_id to be passed as a
+     * query parameter 'order_id'. The resulting URL for
+     * IPN callback notification will have the following form:
+     *
+     * http://my-domain.com/payment/paypal_web_checkout/process?order_id=1001
+     *
+     * No matter what happens here, this controller will
+     * always return a 200 status HTTP response, otherwise
+     * Paypal notification engine will keep on sending the
+     * message.
      *
      * @param Request $request Request element
      *
@@ -91,9 +110,13 @@ class PaypalWebCheckoutController extends Controller
         try {
             $this
                 ->get('paypal_web_checkout.manager')
-                ->processResult($orderId, $request->request->all());
+                ->processPaypalIPNMessage($orderId, $request->request->all());
+
+            $logger->info('[PAYMENT] Paypal payment success. Order number #' . $orderId);
+
         } catch (ParameterNotReceivedException $pex) {
-            $logger->err(
+
+            $logger->error(
                 sprintf(
                     '[PAYMENT] Paypal payment error. Parameter %s not received. Order number #%s',
                     $pex->getMessage(),
@@ -101,17 +124,17 @@ class PaypalWebCheckoutController extends Controller
                 )
             );
 
-            return new Response('FAIL', 200);
         } catch (PaymentException $pe) {
-            $logger->err(
+
+            $logger->error(
                 sprintf(
-                    '[PAYMENT] Paypal payment error. Order number #%s',
-                    $orderId
+                    '[PAYMENT] Paypal payment error (%s). Order number #%s',
+                    $orderId,
+                    $pe->getMessage()
                 )
             );
-        }
 
-        $logger->info('[PAYMENT] Paypal payment success. Order number #' . $orderId);
+        }
 
         return new Response('OK', 200);
     }

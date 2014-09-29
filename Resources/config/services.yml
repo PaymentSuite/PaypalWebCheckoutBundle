@@ -12,9 +12,10 @@ services:
     paypal_web_checkout.manager:
         class: %paypal_web_checkout.manager.class%
         arguments:
-            payment.event.dispatcher: @payment.event.dispatcher
-            payment.bridge: @payment.bridge
-            payment.form.wrapper: @paypal_web_checkout.wrapper
+            event_dispatcher: @payment.event.dispatcher
+            payment_bridge: @payment.bridge
+            form_wrapper: @paypal_web_checkout.wrapper
+            url_factory: @paypal_web_checkout.url_factory
 
     paypal_web_checkout.wrapper:
         class: %paypal_web_checkout.wrapper.class%
@@ -23,8 +24,17 @@ services:
             payment.bridge: @payment.bridge
             router: @router
             business: %paypal_web_checkout.business%
+            url_factory: @paypal_web_checkout.url_factory
+
+    paypal_web_checkout.url_factory:
+        class: %paypal_web_checkout.url_factory.class%
+        arguments:
+            router: @router
+            business: %paypal_web_checkout.business%
             paypal_url: %paypal_web_checkout.api_endpoint%
-            return_url: %paypal_web_checkout.success.route.name%
-            cancel_return_url: %paypal_web_checkout.fail.route.name%
-            notify_url: %paypal_web_checkout.process.route.name%
+            paypal_sandbox_url: %paypal_web_checkout.sandbox_api_endpoint%
+            paypal_notify_validate_query_param: { cmd: _notify-validate }
+            return_route_name: %paypal_web_checkout.success.route.name%
+            cancel_return_route_name: %paypal_web_checkout.fail.route.name%
+            process_route_name: %paypal_web_checkout.process.route.name%
             debug: %paypal_web_checkout.debug%

@@ -24,26 +24,294 @@ use PaymentSuite\PaymentCoreBundle\PaymentMethodInterface;
 class PaypalWebCheckoutMethod implements PaymentMethodInterface
 {
     /**
+     * @var string
+     */
+    protected $paymentStatus;
+
+    /**
+     * @var string
+     */
+    protected $notifyVersion;
+
+    /**
+     * @var string
+     */
+    protected $payerStatus;
+
+    /**
+     * @var string
+     */
+    protected $business;
+
+    /**
+     * @var integer
+     */
+    protected $quantity;
+
+    /**
+     * @var string
+     */
+    protected $paymentType;
+
+    /**
+     * @var string
+     */
+    protected $receiverEmail;
+
+    /**
+     * @var string
+     */
+    protected $pendingReason;
+
+    /**
+     * @var string
+     */
+    protected $txnType;
+
+    /**
+     * @var string
+     */
+    protected $itemName;
+
+    /**
+     * @var string
+     */
+    protected $mcCurrency;
+
+    /**
+     * @var integer
+     */
+    protected $testIpn;
+
+    /**
+     * @var float
+     */
+    protected $paymentGross;
+
+    /**
      * @var float
      *
      * PaypalExpressCheckout amount
      */
-    private $amount;
+    private $mcGross;
 
     /**
      * @var string
      *
      * PaypalExpressCheckout orderId
      */
-    private $orderId;
+    private $itemNumber;
 
     /**
-     * @var SomeExtraData
+     * Paypal verify string check
      *
-     * Some extra data given by payment response
+     * @var string
      */
-    private $someExtraData;
-    
+    private $verifySign;
+
+    /**
+     * Paypal payer Email address
+     *
+     * @var string
+     */
+    private $payerEmail;
+
+    /**
+     * Paypal transaction id
+     *
+     * @var string
+     */
+    private $txnId;
+
+    /**
+     * Paypal currency code
+     *
+     * @var string
+     */
+    private $currency;
+
+    /**
+     * Paypal IPN track id
+     *
+     * @var string
+     */
+    private $ipnTrackId;
+
+    /**
+     * Initialize Paypal Method using an array which represents
+     * the parameters coming from the IPN message as shown in
+     *
+     * https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNandPDTVariables/#id091EAB0105Z
+     * @param float  $mcGross
+     * @param string $paymentStatus
+     * @param string $notifyVersion
+     * @param string $payerStatus
+     * @param string $business
+     * @param string $quantity
+     * @param string $verifySign
+     * @param string $payerEmail
+     * @param string $txnId
+     * @param string $paymentType
+     * @param string $receiverEmail
+     * @param strrig $pendingReason
+     * @param string $txnType
+     * @param string $itemName
+     * @param string $mcCurrency
+     * @param string $itemNumber
+     * @param string $testIpn
+     * @param float  $paymentGross
+     * @param string $ipnTrackId
+     */
+    public function __construct(
+        $mcGross = null, $paymentStatus = null, $notifyVersion = null,
+        $payerStatus = null, $business = null, $quantity = null, $verifySign = null,
+        $payerEmail = null, $txnId = null, $paymentType = null, $receiverEmail = null,
+        $pendingReason = null, $txnType = null, $itemName = null,
+        $mcCurrency = null, $itemNumber = null, $testIpn = null,
+        $paymentGross = null, $ipnTrackId = null
+    )
+    {
+        $this->mcGross = $mcGross;
+        $this->paymentStatus = $paymentStatus;
+        $this->notifyVersion = $notifyVersion;
+        $this->payerStatus = $payerStatus;
+        $this->business = $business;
+        $this->quantity = $quantity;
+        $this->verifySign = $verifySign;
+        $this->payerEmail = $payerEmail;
+        $this->txnId = $txnId;
+        $this->paymentType = $paymentType;
+        $this->receiverEmail = $receiverEmail;
+        $this->pendingReason = $pendingReason;
+        $this->txnType = $txnType;
+        $this->itemName = $itemName;
+        $this->mcCurrency = $mcCurrency;
+        $this->itemNumber = $itemNumber;
+        $this->testIpn = $testIpn;
+        $this->paymentGross = $paymentGross;
+        $this->ipnTrackId = $ipnTrackId;
+    }
+
+    /**
+     * Returns Paypal currency code
+     *
+     * @return mixed
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Sets Paypal currencyt code
+     *
+     * @param mixed $currency
+     *
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Returns Paypal IPN Track ID
+     *
+     * @return mixed
+     */
+    public function getIpnTrackId()
+    {
+        return $this->ipnTrackId;
+    }
+
+    /**
+     * Sets Paypal IPN track ID
+     *
+     * @param mixed $ipnTrackId
+     *
+     * @return $this
+     */
+    public function setIpnTrackId($ipnTrackId)
+    {
+        $this->ipnTrackId = $ipnTrackId;
+
+        return $this;
+    }
+
+    /**
+     * Returns Paypal payer Email address
+     *
+     * @return mixed
+     */
+    public function getPayerEmail()
+    {
+        return $this->payerEmail;
+    }
+
+    /**
+     * Sets Paypal payer Email address
+     *
+     * @param mixed $payerEmail
+     *
+     * @return $this
+     */
+    public function setPayerEmail($payerEmail)
+    {
+        $this->payerEmail = $payerEmail;
+
+        return $this;
+    }
+
+    /**
+     * Returns Paypal transaction id
+     *
+     * @return string
+     */
+    public function getTxnId()
+    {
+        return $this->txnId;
+    }
+
+    /**
+     * Sets Paypal transaction id
+     *
+     * @param string $transactionId
+     *
+     * @return $this
+     */
+    public function setTxnId($transactionId)
+    {
+        $this->txnId = $transactionId;
+
+        return $this;
+    }
+
+    /**
+     * Returns Paypal verify check code
+     *
+     * @return string
+     */
+    public function getVerifySign()
+    {
+        return $this->verifySign;
+    }
+
+    /**
+     * Sets Paypal verify check code
+     *
+     * @param mixed $verifySign
+     *
+     * @return $this
+     */
+    public function setVerifySign($verifySign)
+    {
+        $this->verifySign = $verifySign;
+
+        return $this;
+    }
+
     /**
      * Get PaypalWebCheckout method name
      *
@@ -55,21 +323,49 @@ class PaypalWebCheckoutMethod implements PaymentMethodInterface
     }
 
     /**
+     * Returns Paypal total amount
+     *
      * @return float
      */
-    public function getAmount()
+    public function getMcGross()
     {
-        return $this->amount;
+        return $this->mcGross;
     }
 
     /**
+     * Sets Paypal total amount
+     *
      * @param float $amount
      *
-     * @return PaypalWebCheckoutMethod self Object
+     * @return $this self Object
      */
-    public function setAmount($amount)
+    public function setMcGross($amount)
     {
-        $this->amount = $amount;
+        $this->mcGross = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Returns order id
+     *
+     * @return string
+     */
+    public function getItemNumber()
+    {
+        return $this->itemNumber;
+    }
+
+    /**
+     * Sets order id
+     *
+     * @param string $orderId
+     *
+     * @return $this self Object
+     */
+    public function setItemNumber($orderId)
+    {
+        $this->itemNumber = $orderId;
 
         return $this;
     }
@@ -77,44 +373,235 @@ class PaypalWebCheckoutMethod implements PaymentMethodInterface
     /**
      * @return string
      */
-    public function getOrderId()
+    public function getBusiness()
     {
-        return $this->orderId;
+        return $this->business;
     }
 
     /**
-     * @param string $orderId
-     *
-     * @return PaypalWebCheckoutMethod self Object
+     * @param string $business
      */
-    public function setOrderId($orderId)
+    public function setBusiness($business)
     {
-        $this->orderId = $orderId;
+        $this->business = $business;
 
         return $this;
     }
 
     /**
-     * Set some extra data
-     *
-     * @param string $someExtraData Some extra data
-     *
-     * @return PaypalWebCheckoutMethod self Object
+     * @return string
      */
-    public function setSomeExtraData($someExtraData)
+    public function getItemName()
     {
-        $this->someExtraData = $someExtraData;
+        return $this->itemName;
+    }
+
+    /**
+     * @param string $itemName
+     */
+    public function setItemName($itemName)
+    {
+        $this->itemName = $itemName;
 
         return $this;
     }
 
     /**
-     * Get some extra data
-     *
-     * @return array Some extra data
+     * @return string
      */
-    public function getSomeExtraData()
+    public function getMcCurrency()
     {
-        return $someExtraData;
+        return $this->mcCurrency;
     }
+
+    /**
+     * @param string $mcCurrency
+     */
+    public function setMcCurrency($mcCurrency)
+    {
+        $this->mcCurrency = $mcCurrency;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifyVersion()
+    {
+        return $this->notifyVersion;
+    }
+
+    /**
+     * @param string $notifyVersion
+     */
+    public function setNotifyVersion($notifyVersion)
+    {
+        $this->notifyVersion = $notifyVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPayerStatus()
+    {
+        return $this->payerStatus;
+    }
+
+    /**
+     * @param string $payerStatus
+     */
+    public function setPayerStatus($payerStatus)
+    {
+        $this->payerStatus = $payerStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPaymentGross()
+    {
+        return $this->paymentGross;
+    }
+
+    /**
+     * @param float $paymentGross
+     */
+    public function setPaymentGross($paymentGross)
+    {
+        $this->paymentGross = $paymentGross;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentStatus()
+    {
+        return $this->paymentStatus;
+    }
+
+    /**
+     * @param string $paymentStatus
+     */
+    public function setPaymentStatus($paymentStatus)
+    {
+        $this->paymentStatus = $paymentStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * @param string $paymentType
+     */
+    public function setPaymentType($paymentType)
+    {
+        $this->paymentType = $paymentType;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPendingReason()
+    {
+        return $this->pendingReason;
+    }
+
+    /**
+     * @param string $pendingReason
+     */
+    public function setPendingReason($pendingReason)
+    {
+        $this->pendingReason = $pendingReason;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReceiverEmail()
+    {
+        return $this->receiverEmail;
+    }
+
+    /**
+     * @param string $receiverEmail
+     */
+    public function setReceiverEmail($receiverEmail)
+    {
+        $this->receiverEmail = $receiverEmail;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTestIpn()
+    {
+        return $this->testIpn;
+    }
+
+    /**
+     * @param int $testIpn
+     */
+    public function setTestIpn($testIpn)
+    {
+        $this->testIpn = $testIpn;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTxnType()
+    {
+        return $this->txnType;
+    }
+
+    /**
+     * @param string $txnType
+     */
+    public function setTxnType($txnType)
+    {
+        $this->txnType = $txnType;
+
+        return $this;
+    }
+
 }
