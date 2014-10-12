@@ -40,6 +40,7 @@ class PaypalWebCheckoutExtension extends Extension
         $container->setParameter('paypal_web_checkout.controller.route', $config['controller_route']);
 
         $container->setParameter('paypal_web_checkout.success.route.name', $config['payment_success']['route']);
+        $container->setParameter('paypal_web_checkout.success.route', $config['payment_success']['path']);
         $container->setParameter('paypal_web_checkout.success.order.append', $config['payment_success']['order_append']);
         $container->setParameter('paypal_web_checkout.success.order.field', $config['payment_success']['order_append_field']);
 
@@ -48,6 +49,7 @@ class PaypalWebCheckoutExtension extends Extension
         $container->setParameter('paypal_web_checkout.cancel.order.field', $config['payment_cancel']['order_append_field']);
 
         $container->setParameter('paypal_web_checkout.fail.route.name', $config['payment_fail']['route']);
+        $container->setParameter('paypal_web_checkout.fail.route', $config['payment_fail']['path']);
         $container->setParameter('paypal_web_checkout.fail.order.append', $config['payment_fail']['order_append']);
         $container->setParameter('paypal_web_checkout.fail.order.field', $config['payment_fail']['order_append_field']);
 
