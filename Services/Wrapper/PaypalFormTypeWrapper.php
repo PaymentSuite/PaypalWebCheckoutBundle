@@ -138,7 +138,7 @@ class PaypalFormTypeWrapper
             ->formFactory
             ->createNamedBuilder(null);
 
-        $itemNumber = $this->paymentBridge->getOrderNumber();
+        $itemNumber = $this->paymentBridge->getOrderId();
         $amount = $this->paymentBridge->getAmount()->getAmount()/100;
         $currency = $this->checkCurrency($this->paymentBridge->getCurrency());
 
@@ -149,7 +149,7 @@ class PaypalFormTypeWrapper
         $cancelReturnUrl = $this->router->generate($this->cancelReturnRouteName, [], true);
         $notifyUrl = $this->router->generate(
             $this->notifyRouteName,
-            [ 'order_id' => $this->paymentBridge->getOrderNumber() ],
+            [ 'order_id' => $this->paymentBridge->getOrderId() ],
             true
         );
 

@@ -29,9 +29,9 @@ class PaypalWebCheckoutMethod implements PaymentMethodInterface
     /**
      * @var string
      *
-     * PaypalExpressCheckout orderNumber
+     * PaypalExpressCheckout orderId
      */
-    private $orderNumber;
+    private $orderId;
 
     /**
      * @var SomeExtraData
@@ -73,19 +73,19 @@ class PaypalWebCheckoutMethod implements PaymentMethodInterface
     /**
      * @return string
      */
-    public function getOrderNumber()
+    public function getOrderId()
     {
-        return $this->orderNumber;
+        return $this->orderId;
     }
 
     /**
-     * @param string $orderNumber
+     * @param string $orderId
      *
      * @return PaypalWebCheckoutMethod self Object
      */
-    public function setOrderNumber($orderNumber)
+    public function setOrderId($orderId)
     {
-        $this->orderNumber = $orderNumber;
+        $this->orderId = $orderId;
 
         return $this;
     }
