@@ -1,13 +1,14 @@
 <?php
 
 /**
- * PaypalWebCheckout for Symfony2
+ * This file is part of the PaymentSuite package.
  *
- * This Bundle is part of Symfony2 Payment Suite
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  *
- * @author Arkaitz Garro <hola@arkaitzgarro.com>
+ * Feel free to edit as you please, and have fun.
  *
- * Arkaitz Garro 2014
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\Tests\Services;
@@ -18,6 +19,8 @@ use PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper\PaypalFormTypeWrapper;
 
 /**
  * Class PaypalFormTypeWrapperTest
+ *
+ * @author Arkaitz Garro <hola@arkaitzgarro.com>
  */
 class PaypalFormTypeWrapperTest extends TypeTestCase
 {

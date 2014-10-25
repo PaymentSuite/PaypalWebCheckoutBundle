@@ -1,13 +1,14 @@
 <?php
 
 /**
- * PaypalWebCheckout for Symfony2
+ * This file is part of the PaymentSuite package.
  *
- * This Bundle is part of Symfony2 Payment Suite
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  *
- * @author Arkaitz Garro <hola@arkaitzgarro.com>
+ * Feel free to edit as you please, and have fun.
  *
- * Arkaitz Garro 2014
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\DependencyInjection;
@@ -17,6 +18,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
+ *
+ * @author Arkaitz Garro <hola@arkaitzgarro.com>
  */
 class Configuration implements ConfigurationInterface
 {

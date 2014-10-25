@@ -1,13 +1,14 @@
 <?php
 
 /**
- * PaypalWebCheckout for Symfony2
+ * This file is part of the PaymentSuite package.
  *
- * This Bundle is part of Symfony2 Payment Suite
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  *
- * @author Arkaitz Garro <hola@arkaitzgarro.com>
+ * Feel free to edit as you please, and have fun.
  *
- * Arkaitz Garro 2014
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\Services;
@@ -16,12 +17,15 @@ use PaymentSuite\PaymentCoreBundle\Exception\PaymentException;
 use PaymentSuite\PaymentCoreBundle\Exception\PaymentOrderNotFoundException;
 use PaymentSuite\PaymentCoreBundle\Services\Interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaymentCoreBundle\Services\PaymentEventDispatcher;
-use PaymentSuite\PaypalWebCheckoutBundle\PaypalWebCheckoutMethod;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\ParameterNotReceivedException;
+use PaymentSuite\PaypalWebCheckoutBundle\PaypalWebCheckoutMethod;
 use PaymentSuite\PaypalWebCheckoutBundle\Services\Wrapper\PaypalFormTypeWrapper;
 
 /**
- * Paypal Web Checkout manager
+ * Class PaypalWebCheckoutManager
+ *
+ * @author Arkaitz Garro <hola@arkaitzgarro.com>
+ * @author Mickaël Andrieu <andrieu.travail@gmail.com>
  */
 class PaypalWebCheckoutManager
 {
