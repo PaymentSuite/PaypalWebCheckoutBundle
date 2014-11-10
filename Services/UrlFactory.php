@@ -110,7 +110,7 @@ class UrlFactory
     {
         return $this->router->generate(
             $this->returnRouteName,
-            ['id' => $orderId],
+            array('id' => $orderId),
             true
         );
     }
@@ -119,7 +119,7 @@ class UrlFactory
     {
         return $this->router->generate(
             $this->cancelReturnRouteName,
-            ['id' => $orderId],
+            array('id' => $orderId),
             true
         );
     }
@@ -138,7 +138,7 @@ class UrlFactory
     {
         return $this->router->generate(
             $this->processRouteName,
-            [ 'order_id' => $orderId ],
+            array('order_id' => $orderId),
             true
         );
     }
