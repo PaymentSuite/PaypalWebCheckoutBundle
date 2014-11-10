@@ -129,10 +129,10 @@ class UrlFactory
      * which is triggered after PayPal processes the
      * payment and returns the validity of the transaction
      *
-     * For forther information
+     * For further information
      *
-     * https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNandPDTVariables/
-     * https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/
+     * @link https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNandPDTVariables/
+     * @link https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/
      */
     public function getProcessUrlForOrderId($orderId)
     {
@@ -159,7 +159,7 @@ class UrlFactory
      * Returns the param/value query string for triggering the
      * validation of the paypal IPN message.
      *
-     * See https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNIntro/
+     * @link https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNIntro/
      *
      * @return array
      */

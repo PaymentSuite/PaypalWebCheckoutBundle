@@ -35,6 +35,6 @@ services:
             paypal_sandbox_url: %paypal_web_checkout.sandbox_api_endpoint%
             paypal_notify_validate_query_param: { cmd: _notify-validate }
             return_route_name: %paypal_web_checkout.success.route.name%
-            cancel_return_route_name: %paypal_web_checkout.fail.route.name%
+            cancel_return_route_name: %paypal_web_checkout.cancel.route.name%
             process_route_name: %paypal_web_checkout.process.route.name%
             debug: %paypal_web_checkout.debug%

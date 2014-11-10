@@ -85,7 +85,7 @@ class PaypalWebCheckoutManager
      * final stage of a checkout process.
      *
      * See documentation for PaypalWebCheckout Api Integration at
-     * https://developer.paypal.com/docs/integration/web/web-checkout/
+     * @link https://developer.paypal.com/docs/integration/web/web-checkout/
      *
      * @throws PaymentOrderNotFoundException
      *
@@ -93,7 +93,7 @@ class PaypalWebCheckoutManager
      */
     public function generatePaypalForm()
     {
-        $paypalMethod = new PaypalWebCheckoutMethod([]);
+        $paypalMethod = new PaypalWebCheckoutMethod();
 
         /**
          * We expect listeners for the payment.order.load event
@@ -186,7 +186,6 @@ class PaypalWebCheckoutManager
             $parameters['mc_currency'],
             $parameters['item_number'],
             $parameters['test_ipn'],
-            $parameters['payment_gross'],
             $parameters['ipn_track_id']
         );
 
@@ -249,7 +248,6 @@ class PaypalWebCheckoutManager
         foreach ($requiredParameters as $requiredParameter) {
 
             if (!isset($parameters[$requiredParameter])) {
-
                throw new ParameterNotReceivedException($requiredParameter);
             }
         }
@@ -264,7 +262,7 @@ class PaypalWebCheckoutManager
      * check is essential since the web checkout form
      * could be mangled.
      *
-     * See https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNIntro/
+     * @link https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNIntro/
      *
      * @param array $ipnParameters Paypal IPN parameters
      *

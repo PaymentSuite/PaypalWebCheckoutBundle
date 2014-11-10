@@ -37,11 +37,8 @@ class PaypalWebCheckoutController extends Controller
     public function executeAction(Request $request)
     {
         /*
-         * This is used to BUILD THE FORM before redirecting
-         *
-         * Should be renamed renderRedirectFormAction
-         *
-         * The manager method should also be renamed to createRedirectFormView
+         * The execute action will generate the Paypal web
+         * checkout form before redirecting
          */
         $formView = $this->get('paypal_web_checkout.manager')->generatePaypalForm();
 

@@ -243,7 +243,7 @@ class PaypalFormTypeWrapper
 
     public function checkCurrency($currency)
     {
-        $allowedCurrencies = [
+        $allowedCurrencies = array(
             'AUD',
             'BRL',
             'CAD',
@@ -269,7 +269,7 @@ class PaypalFormTypeWrapper
             'THB',
             'TRY',
             'USD'
-        ];
+        );
 
         if (!in_array($currency, $allowedCurrencies)) {
             throw new CurrencyNotSupportedException();
