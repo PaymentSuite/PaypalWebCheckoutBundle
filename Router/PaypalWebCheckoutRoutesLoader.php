@@ -13,6 +13,7 @@
 
 namespace PaymentSuite\PaypalWebCheckoutBundle\Router;
 
+use \RuntimeException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Routing\Route;
@@ -49,21 +50,21 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
     /**
      * Construct method
      *
-     * @param string $controllerRouteName       Controller route name
-     * @param string $controllerRoute           Controller route
-     * @param string $controllerNotifyRouteName Controller route name
-     * @param string $controllerNotifyRoute     Controller route
+     * @param string $controllerRouteName        Controller route name
+     * @param string $controllerRoute            Controller route
+     * @param string $controllerProcessRouteName Controller route name
+     * @param string $controllerProcessRoute     Controller route
      */
     public function __construct(
         $controllerRouteName,
         $controllerRoute,
-        $controllerNotifyRouteName,
-        $controllerNotifyRoute
+        $controllerProcessRouteName,
+        $controllerProcessRoute
     ) {
         $this->controllerRouteName = $controllerRouteName;
         $this->controllerRoute = $controllerRoute;
-        $this->controllerNotifyRouteName = $controllerNotifyRouteName;
-        $this->controllerNotifyRoute = $controllerNotifyRoute;
+        $this->controllerProcessRouteName = $controllerProcessRouteName;
+        $this->controllerProcessRoute = $controllerProcessRoute;
     }
 
     /**
@@ -74,42 +75,33 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
      *
      * @return RouteCollection
      *
-     * @throws RuntimeException Loader is added twice
+     * @throws \RuntimeException Loader is added twice
      */
     public function load($resource, $type = null)
     {
         if ($this->loaded) {
 
-            throw new \RuntimeException('Do not add this loader twice');
+            throw new RuntimeException('Do not add this loader twice');
         }
 
         $routes = new RouteCollection();
 
-        $routes->add($this->controllerRouteName, new Route($this->controllerRoute, array(
-            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:execute',
-        )));
-
-        $routes->add($this->controllerSuccessRouteName, new Route($this->controllerSuccessRoute, array(
-            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:ok',
-        )));
-
-        $routes->add($this->controllerFailRouteName, new Route($this->controllerFailRoute, array(
-            '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:ko',
-        )));
+        $routes->add(
+            $this->controllerRouteName,
+            new Route(
+                $this->controllerRoute,
+                array(
+                    '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:execute',
+                )
+            )
+        );
 
         $routes->add(
-            $this->controllerNotifyRouteName,
+            $this->controllerProcessRouteName,
             new Route(
-                $this->controllerNotifyRoute,
+                $this->controllerProcessRoute,
                 array(
                     '_controller' => 'PaypalWebCheckoutBundle:PaypalWebCheckout:process',
-                ),
-                array(),
-                array(),
-                '',
-                array(),
-                array(
-                    'POST'
                 )
             )
         );

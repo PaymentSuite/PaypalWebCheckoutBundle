@@ -18,6 +18,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 use PaymentSuite\PaymentCoreBundle\Services\interfaces\PaymentBridgeInterface;
 use PaymentSuite\PaypalWebCheckoutBundle\Exception\CurrencyNotSupportedException;
+use PaymentSuite\PaypalWebCheckoutBundle\Services\UrlFactory;
 
 /**
  * Class PaypalFormTypeWrapper
@@ -35,14 +36,14 @@ class PaypalFormTypeWrapper
     protected $formFactory;
 
     /**
-     * @var PaymentBridge
+     * @var PaymentBridgeInterface
      *
      * Payment bridge
      */
     private $paymentBridge;
 
     /**
-     * @var Router
+     * @var RouterInterface
      *
      * Router
      */
@@ -100,37 +101,24 @@ class PaypalFormTypeWrapper
     /**
      * Formtype construct method
      *
-     * @param FormFactory            $formFactory             Form factory
-     * @param PaymentBridgeInterface $paymentBridge           Payment bridge
-     * @param RouterInterface        $router                  Routing service
-     * @param string                 $bussines                merchant code
-     * @param string                 $paypalUrl               gateway url
-     * @param string                 $returnRouteName         merchant route ok
-     * @param string                 $cancelReturnRouteName   merchant route ko
-     * @param string                 $notifyRouteName         merchant payment proccess route
-     * @param boolean                $debug                   debug mode
+     * @param FormFactory            $formFactory   Form factory
+     * @param PaymentBridgeInterface $paymentBridge Payment bridge
+     * @param RouterInterface        $router        Routing service
+     * @param string                 $business      merchant code
+     * @param UrlFactory             $urlFactory    URL Factory service
      */
     public function __construct(
         FormFactory $formFactory,
         PaymentBridgeInterface $paymentBridge,
         RouterInterface $router,
         $business,
-        $paypalUrl,
-        $returnRouteName,
-        $cancelReturnRouteName,
-        $notifyRouteName,
-        $debug
+        URLFactory $urlFactory
     ) {
         $this->formFactory           = $formFactory;
         $this->paymentBridge         = $paymentBridge;
         $this->router                = $router;
         $this->business              = $business;
-        $this->paypalUrl             = $paypalUrl;
-        $this->returnRouteName       = $returnRouteName;
-        $this->cancelReturnRouteName = $cancelReturnRouteName;
-        $this->notifyRouteName       = $notifyRouteName;
-        $this->debug                 = $debug;
-        $this->env                   = 'www.sandbox';
+        $this->urlFactory            = $urlFactory;
     }
 
     /**
@@ -140,35 +128,90 @@ class PaypalFormTypeWrapper
      */
     public function buildForm()
     {
-        $extraData = $this->paymentBridge->getExtraData();
         $formBuilder = $this
             ->formFactory
             ->createNamedBuilder(null);
 
-        $itemNumber = $this->paymentBridge->getOrderId();
-        $amount = $this->paymentBridge->getAmount()->getAmount()/100;
-        $currency = $this->checkCurrency($this->paymentBridge->getCurrency());
+        $orderId = $this
+            ->paymentBridge
+            ->getOrderId();
 
-        /**
-         * Create routes
+        /*
+         * PaymentBridge stores payment amount in cents
          */
-        $returnUrl = $this->router->generate($this->returnRouteName, [], true);
-        $cancelReturnUrl = $this->router->generate($this->cancelReturnRouteName, [], true);
-        $notifyUrl = $this->router->generate(
-            $this->notifyRouteName,
-            [ 'order_id' => $this->paymentBridge->getOrderId() ],
-            true
+        $amount = $this
+                ->paymentBridge
+                ->getAmount() / 100;
+
+        $currency = $this
+            ->checkCurrency(
+                $this
+                    ->paymentBridge
+                    ->getCurrency()
+            );
+
+        /*
+         * Creates the return route, when coming back
+         * from PayPal web checkout
+         */
+        $returnUrl = $this
+            ->urlFactory
+            ->getReturnUrlForOrderId($orderId);
+
+        /*
+         * Creates the cancel payment route, when cancelling
+         * the payment process from PayPal web checkout
+         */
+        $cancelUrl = $this
+            ->urlFactory
+            ->getCancelReturnUrlForOrderId($orderId);
+
+        /*
+         * Creates the IPN payment notification route,
+         * which is triggered after PayPal processes the
+         * payment and returns the validity of the transaction
+         *
+         * For forther information
+         *
+         * https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNandPDTVariables/
+         * https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNIntro/
+         */
+        $processUrl = $this->urlFactory->getProcessUrlForOrderId($orderId);
+
+        /*
+         * Imploding the list of product names in the order to a single string.
+         *
+         * Project specific PaymentBridgeInterface::getExtraData
+         * should return an array of this form
+         *
+         *   ['items' => [
+         *       1 => [ 'item' => 'Item 1', 'amount' => 1234, 'currency_code' => 'EUR ],
+         *       2 => [ 'item_name' => 'Item 2', 'item_amount' => 2345, 'item_currency_code' => 'EUR ],
+         *   ]]
+         *
+         * The 'items' key consists of an array with the basic information
+         * of each line of the order
+         *
+         */
+        $productName = array_reduce(
+            $this->paymentBridge->getExtraData()['items'],
+
+            function ($productName, $orderLine) {
+                return trim(
+                    sprintf(
+                        '%s %s',
+                        $productName,
+                        $orderLine['item_name'])
+                );
+            }
         );
 
-        if (!$this->debug) {
-            $this->paypalUrl = str_replace('.sandbox', '', $this->paypalUrl);
-            $this->env       = str_replace('.sandbox', '', $this->env);
-        }
-
         $formBuilder
-            ->setAction($this->paypalUrl)
+            ->setAction($this->urlFactory->getPaypalBaseUrl())
             ->setMethod('POST')
-
+            ->add('item_name', 'hidden', array(
+                'data' => $productName
+            ))
             ->add('amount', 'hidden', array(
                 'data' => $amount,
             ))
@@ -179,13 +222,13 @@ class PaypalFormTypeWrapper
                 'data' => $returnUrl,
             ))
             ->add('cancel_return', 'hidden', array(
-                'data' => $cancelReturnUrl,
+                'data' => $cancelUrl,
             ))
             ->add('notify_url', 'hidden', array(
-                'data' => $notifyUrl,
+                'data' => $processUrl,
             ))
             ->add('item_number', 'hidden', array(
-                'data' => $itemNumber,
+                'data' => $orderId,
             ))
             ->add('currency_code', 'hidden', array(
                 'data' => $currency,
@@ -200,7 +243,7 @@ class PaypalFormTypeWrapper
 
     public function checkCurrency($currency)
     {
-        $allowedCurrencies = [
+        $allowedCurrencies = array(
             'AUD',
             'BRL',
             'CAD',
@@ -226,7 +269,7 @@ class PaypalFormTypeWrapper
             'THB',
             'TRY',
             'USD'
-        ];
+        );
 
         if (!in_array($currency, $allowedCurrencies)) {
             throw new CurrencyNotSupportedException();
