@@ -41,6 +41,20 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
     private $controllerRoute;
 
     /**
+     * @var string
+     *
+     * Success route name
+     */
+    private $controllerSuccessRouteName;
+
+    /**
+     * @var string
+     *
+     * Success controller route
+     */
+    private $controllerSuccessRoute;
+
+    /**
      * @var boolean
      *
      * Route is loaded
@@ -80,7 +94,6 @@ class PaypalWebCheckoutRoutesLoader implements LoaderInterface
     public function load($resource, $type = null)
     {
         if ($this->loaded) {
-
             throw new RuntimeException('Do not add this loader twice');
         }
 

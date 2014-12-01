@@ -7,3 +7,6 @@ composer.lock
 
 # PHPUnit
 phpunit.xml
+
+# Editors
+.idea/*

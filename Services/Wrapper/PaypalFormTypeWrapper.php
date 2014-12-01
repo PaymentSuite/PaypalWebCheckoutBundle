@@ -178,43 +178,9 @@ class PaypalFormTypeWrapper
          */
         $processUrl = $this->urlFactory->getProcessUrlForOrderId($orderId);
 
-        /*
-         * Imploding the list of product names in the order to a single string.
-         *
-         * Project specific PaymentBridgeInterface::getExtraData
-         * should return an array of this form
-         *
-         *   ['items' => [
-         *       1 => [ 'item' => 'Item 1', 'amount' => 1234, 'currency_code' => 'EUR ],
-         *       2 => [ 'item_name' => 'Item 2', 'item_amount' => 2345, 'item_currency_code' => 'EUR ],
-         *   ]]
-         *
-         * The 'items' key consists of an array with the basic information
-         * of each line of the order
-         *
-         */
-        $productName = array_reduce(
-            $this->paymentBridge->getExtraData()['items'],
-
-            function ($productName, $orderLine) {
-                return trim(
-                    sprintf(
-                        '%s %s',
-                        $productName,
-                        $orderLine['item_name'])
-                );
-            }
-        );
-
         $formBuilder
             ->setAction($this->urlFactory->getPaypalBaseUrl())
             ->setMethod('POST')
-            ->add('item_name', 'hidden', array(
-                'data' => $productName
-            ))
-            ->add('amount', 'hidden', array(
-                'data' => $amount,
-            ))
             ->add('business', 'hidden', array(
                 'data' => $this->business,
             ))
@@ -227,9 +193,6 @@ class PaypalFormTypeWrapper
             ->add('notify_url', 'hidden', array(
                 'data' => $processUrl,
             ))
-            ->add('item_number', 'hidden', array(
-                'data' => $orderId,
-            ))
             ->add('currency_code', 'hidden', array(
                 'data' => $currency,
             ))
@@ -237,6 +200,37 @@ class PaypalFormTypeWrapper
                 'data' => $this->env,
             ))
         ;
+
+        /*
+         * Create a PayPal cart line for each order line.
+         *
+         * Project specific PaymentBridgeInterface::getExtraData
+         * should return an array of this form
+         *
+         *   ['items' => [
+         *       1 => [ 'item_name' => 'Item 1', 'amount' => 1234, 'quantity' => 2 ],
+         *       2 => [ 'item_name' => 'Item 2', 'amount' => 2345, 'quantity' => 1 ],
+         *   ]]
+         *
+         * The 'items' key consists of an array with the basic information
+         * of each line of the order. Amount is the price of the product,
+         * not the total of the order line
+         *
+         */
+        $items = $this->paymentBridge->getExtraData()['items'];
+        foreach ($items as $key => $orderLine) {
+            $formBuilder
+                ->add('item_name_'.$key, 'hidden', array(
+                    'data' => $orderLine['item_name']
+                ))
+                ->add('amount_'.$key, 'hidden', array(
+                    'data' => $orderLine['amount'],
+                ))
+                ->add('quantity_'.$key, 'hidden', array(
+                    'data' => $orderLine['quantity'],
+                ))
+                ;
+        }
 
         return $formBuilder->getForm()->createView();
     }

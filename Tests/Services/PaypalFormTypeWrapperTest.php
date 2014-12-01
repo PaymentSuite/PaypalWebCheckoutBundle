@@ -44,7 +44,12 @@ class PaypalFormTypeWrapperTest extends TypeTestCase
     /**
      * @var string
      */
-    const cancelRouteName = 'payment_failed';
+    const cancelRouteName = 'payment_cancel';
+
+    /**
+     * @var string
+     */
+    const failedRouteName = 'payment_failed';
 
     /**
      * @var string
@@ -92,6 +97,18 @@ class PaypalFormTypeWrapperTest extends TypeTestCase
             ->getMock()
         ;
 
+        $this->paymentBridge
+            ->method('getCurrency')
+            ->willReturn('EUR');
+
+        $this->paymentBridge
+            ->method('getAmount')
+            ->willReturn(1000);
+
+        $this->paymentBridge
+            ->method('getExtraData')
+            ->willReturn(array('items' => array()));
+
         $this->paymentEventDispatcher = $this
             ->getMockBuilder('PaymentSuite\PaymentCoreBundle\Services\PaymentEventDispatcher')
             ->disableOriginalConstructor()
@@ -106,16 +123,16 @@ class PaypalFormTypeWrapperTest extends TypeTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $urlFactory = $this->getMockBuilder('PaymentSuite\PaypalWebCheckoutBundle\Services\UrlFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->paypalFormTypeWrapper = new PaypalFormTypeWrapper($this->factory,
             $this->paymentBridge,
             $router,
             $this::business,
-            $this::url,
-            $this::returnRouteName,
-            $this::cancelRouteName,
-            $this::notifyRouteName,
-            true,
-            'www.sandbox');
+            $urlFactory
+            );
     }
 
     /**
@@ -126,7 +143,7 @@ class PaypalFormTypeWrapperTest extends TypeTestCase
         $amount = 10;
 
         $formData = array(
-            'amount' => $amount * 100
+            'business' => 'arkaitz.garro-facilitator@gmail.com'
         );
 
         $formView = $this->paypalFormTypeWrapper->buildForm();

@@ -26,14 +26,14 @@ class PaypalWebCheckoutControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/');
+        $crawler = $client->request('GET', '/payment/paypal_web_checkout/execute');
 
-        $this->assertTrue($client->getResponse()->isRedirect());
+        // $this->assertTrue($client->getResponse()->isRedirect());
 
-        $crawler = $client->followRedirect();
+        // $crawler = $client->followRedirect();
 
-        $this->assertTrue($crawler->filter('form')->count() === 1);
+        $this->assertEquals(1, $crawler->filter('form#paypal_checkout_form')->count());
 
-        $this->assertTrue($crawler->filter('input[type="hidden"]')->count() === 10);
+        $this->assertEquals(12, $crawler->filter('input[type="hidden"]')->count());
     }
 }
