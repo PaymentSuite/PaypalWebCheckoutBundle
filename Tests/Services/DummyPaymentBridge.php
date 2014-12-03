@@ -116,7 +116,7 @@ class DummyPaymentBridge implements PaymentBridgeInterface
     {
         return array(
             'items' => array(
-                1 => array(
+                array(
                     'item_name' => 'Item name 1',
                     'amount' => 100,
                     'quantity' => 1,
