@@ -136,13 +136,6 @@ class PaypalFormTypeWrapper
             ->paymentBridge
             ->getOrderId();
 
-        /*
-         * PaymentBridge stores payment amount in cents
-         */
-        $amount = $this
-                ->paymentBridge
-                ->getAmount() / 100;
-
         $currency = $this
             ->checkCurrency(
                 $this
@@ -208,8 +201,8 @@ class PaypalFormTypeWrapper
          * should return an array of this form
          *
          *   ['items' => [
-         *       1 => [ 'item_name' => 'Item 1', 'amount' => 1234, 'quantity' => 2 ],
-         *       2 => [ 'item_name' => 'Item 2', 'amount' => 2345, 'quantity' => 1 ],
+         *       0 => [ 'item_name' => 'Item 1', 'amount' => 1234, 'quantity' => 2 ],
+         *       1 => [ 'item_name' => 'Item 2', 'amount' => 2345, 'quantity' => 1 ],
          *   ]]
          *
          * The 'items' key consists of an array with the basic information
@@ -218,18 +211,21 @@ class PaypalFormTypeWrapper
          *
          */
         $items = $this->paymentBridge->getExtraData()['items'];
-        foreach ($items as $key => $orderLine) {
+        $iter = 1;
+
+        foreach ($items as $orderLine) {
             $formBuilder
-                ->add('item_name_'.$key, 'hidden', array(
+                ->add('item_name_'.$iter, 'hidden', array(
                     'data' => $orderLine['item_name']
                 ))
-                ->add('amount_'.$key, 'hidden', array(
+                ->add('amount_'.$iter, 'hidden', array(
                     'data' => $orderLine['amount'],
                 ))
-                ->add('quantity_'.$key, 'hidden', array(
+                ->add('quantity_'.$iter, 'hidden', array(
                     'data' => $orderLine['quantity'],
                 ))
-                ;
+            ;
+            $iter++;
         }
 
         return $formBuilder->getForm()->createView();
