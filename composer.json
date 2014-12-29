@@ -1,7 +1,7 @@
 {
-    "name": "paymentsuite/paypal-web_checkout-bundle",
+    "name": "paymentsuite/paypal-web-checkout-bundle",
     "type": "symfony-bundle",
-    "description": "Redsys PaymentSuite Component",
+    "description": "Paypal Web Checkout PaymentSuite Component",
     "keywords": ["redsys", "sermepa", "payment", "ecommerce"],
     "license": "MIT",
     "authors": [
