@@ -126,8 +126,8 @@ class PaypalWebCheckoutController extends Controller
             $logger->error(
                 sprintf(
                     '[PAYMENT] Paypal payment error (%s). Order number #%s',
-                    $orderId,
-                    $pe->getMessage()
+                    $pe->getMessage(),
+                    $orderId
                 )
             );
 
