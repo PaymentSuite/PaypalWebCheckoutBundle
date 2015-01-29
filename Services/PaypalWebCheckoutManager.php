@@ -174,7 +174,7 @@ class PaypalWebCheckoutManager
             $parameters['notify_version'],
             $parameters['payer_status'],
             $parameters['business'],
-            $parameters['quantity'],
+            null,
             $parameters['verify_sign'],
             $parameters['payer_email'],
             $parameters['txn_id'],
@@ -182,9 +182,9 @@ class PaypalWebCheckoutManager
             $parameters['receiver_email'],
             null,
             $parameters['txn_type'],
-            $parameters['item_name'],
+            null,
             $parameters['mc_currency'],
-            $parameters['item_number'],
+            null,
             $parameters['test_ipn'],
             $parameters['ipn_track_id']
         );
@@ -241,7 +241,6 @@ class PaypalWebCheckoutManager
     protected function checkResultParameters(array $parameters)
     {
         $requiredParameters = array(
-            'item_number',
             'payment_status'
         );
 
