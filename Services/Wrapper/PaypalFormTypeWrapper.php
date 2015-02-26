@@ -219,7 +219,7 @@ class PaypalFormTypeWrapper
                     'data' => $orderLine['item_name']
                 ))
                 ->add('amount_'.$iter, 'hidden', array(
-                    'data' => $orderLine['amount'],
+                    'data' => $orderLine['amount'] / 100,
                 ))
                 ->add('quantity_'.$iter, 'hidden', array(
                     'data' => $orderLine['quantity'],
