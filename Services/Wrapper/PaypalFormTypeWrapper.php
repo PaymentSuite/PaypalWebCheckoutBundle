@@ -210,10 +210,11 @@ class PaypalFormTypeWrapper
          * not the total of the order line
          *
          */
-        $items = $this->paymentBridge->getExtraData()['items'];
+        $cartData = $this->paymentBridge->getExtraData();
+        $itemsData = $cartData['items'];
         $iter = 1;
 
-        foreach ($items as $orderLine) {
+        foreach ($itemsData as $orderLine) {
             $formBuilder
                 ->add('item_name_'.$iter, 'hidden', array(
                     'data' => $orderLine['item_name']
@@ -226,6 +227,12 @@ class PaypalFormTypeWrapper
                 ))
             ;
             $iter++;
+        }
+
+        if (isset($cartData['discount_amount_cart'])) {
+            $formBuilder->add('discount_amount_cart', 'hidden', array(
+                'data' => $cartData['discount_amount_cart'] / 100
+            ));
         }
 
         return $formBuilder->getForm()->createView();
